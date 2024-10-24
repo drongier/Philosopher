@@ -10,7 +10,8 @@ SOURCES = sources/main.c \
 			sources/check_errors.c \
 			sources/utils.c \
 			sources/philo_routine.c \
-			sources/spy_philo.c
+			sources/spy_philo.c \
+			sources/init.c
 
 all: 
 	${CC} ${FLAGS} ${SOURCES} -o ${NAME}

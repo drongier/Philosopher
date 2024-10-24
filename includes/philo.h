@@ -48,5 +48,9 @@ int     get_time(void);
 void    ft_sleep_eat(int time);
 void	*spy_philos(void *arg);
 void	print_message(char *str, t_philo *philo, int id);
-int check_dead_loop(t_philo *philo);
+int     check_dead_loop(t_philo *philo);
+int     init_philos(t_table *table);
+int     init_struct(t_table *table, char **av);
+void	init_forks(t_table *table, int philo_nbr);
+void	init_prog(t_table *table);
 
