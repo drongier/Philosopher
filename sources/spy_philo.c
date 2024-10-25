@@ -1,9 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   spy_philo.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drongier <drongier@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/25 14:17:27 by drongier          #+#    #+#             */
+/*   Updated: 2024/10/25 14:20:48 by drongier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
-// Checks if the philoopher is dead
-
 int	philo_dead(t_philo *philo, int time_to_die)
-{  
+{
 	pthread_mutex_lock(&philo->meal_lock);
 	if (get_time() - philo->last_meal >= time_to_die)
 		return (pthread_mutex_unlock(&philo->meal_lock), 1);
@@ -50,9 +60,9 @@ int	check_if_all_ate(t_philo *philo)
 	}
 	if (finished_eating == philo->table->philo_nbr)
 	{
-        pthread_mutex_lock(&philo->dead_lock);
-        philo->table->philo_dead = 1;
-        pthread_mutex_unlock(&philo->dead_lock);
+		pthread_mutex_lock(&philo->dead_lock);
+		philo->table->philo_dead = 1;
+		pthread_mutex_unlock(&philo->dead_lock);
 		return (1);
 	}
 	return (0);
@@ -64,9 +74,9 @@ void	*spy_philos(void *arg)
 
 	philo = (t_philo *)arg;
 	while (1)
-    {
+	{
 		if (check_if_all_ate(philo) == 1 || check_if_dead(philo) == 1)
-			break;
-    }
+			break ;
+	}
 	return (arg);
 }

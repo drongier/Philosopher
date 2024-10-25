@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drongier <drongier@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/25 14:21:10 by drongier          #+#    #+#             */
+/*   Updated: 2024/10/25 14:22:01 by drongier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
-void exit_error(int i)
+void	exit_error(int i)
 {
-    if (i == 1)
-        printf("Error: Arg is not a number !\n");
-    else if (i == 2)
-        printf("Error: INT MAX or INT MIN !\n");
-    else if (i == 3)
-        printf("Error: pls use ./philo xxx xxx xxx xxx [x]\n");
+	if (i == 1)
+		printf("Error: Arg is not a number !\n");
+	else if (i == 2)
+		printf("Error: INT MAX or INT MIN !\n");
+	else if (i == 3)
+		printf("Error: pls use ./philo xxx xxx xxx xxx [x]\n");
 }
 
 int	get_time(void)
@@ -18,7 +30,7 @@ int	get_time(void)
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
-void ft_sleep_eat(int time)
+void	ft_sleep_eat(int time)
 {
 	int	start;
 

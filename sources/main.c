@@ -38,7 +38,8 @@ int	create_thread(t_table *table)
 		end_prog(table);
 	while (i < table->philo_nbr)
 	{
-		if (pthread_create(&table->philo[i].thread_id, NULL, &philo_routine, (void *)&table->philo[i]))
+		if (pthread_create(&table->philo[i].thread_id, NULL, \
+		&philo_routine, (void *)&table->philo[i]))
 			return (exit_error(1), FALSE);
 		i++;
 	}
