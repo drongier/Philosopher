@@ -12,13 +12,17 @@
 
 #include "../includes/philo.h"
 
-int	philo_dead(t_philo *philo, int time_to_die)
+int philo_dead(t_philo *philo, int time_to_die)
 {
-	pthread_mutex_lock(&philo->meal_lock);
-	if (get_time() - philo->last_meal >= time_to_die)
-		return (pthread_mutex_unlock(&philo->meal_lock), 1);
-	pthread_mutex_unlock(&philo->meal_lock);
-	return (0);
+    int time_diff;
+    
+    pthread_mutex_lock(&philo->meal_lock);
+    time_diff = get_time() - philo->last_meal;
+    pthread_mutex_unlock(&philo->meal_lock);
+    
+    if (time_diff >= time_to_die)
+        return (1);
+    return (0);
 }
 
 int	check_if_dead(t_philo *philo)
@@ -31,9 +35,9 @@ int	check_if_dead(t_philo *philo)
 		if (philo_dead(&philo[i], philo[i].time_to_die))
 		{
 			print_message("died", &philo[i], philo[i].id);
-			pthread_mutex_lock(&philo->dead_lock);
+			pthread_mutex_lock(&philo->table->dead_lock);
 			philo->table->philo_dead = 1;
-			pthread_mutex_unlock(&philo->dead_lock);
+			pthread_mutex_unlock(&philo->table->dead_lock);
 			return (1);
 		}
 		i++;
@@ -60,9 +64,9 @@ int	check_if_all_ate(t_philo *philo)
 	}
 	if (finished_eating == philo->table->philo_nbr)
 	{
-		pthread_mutex_lock(&philo->dead_lock);
+		pthread_mutex_lock(&philo->table->dead_lock);
 		philo->table->philo_dead = 1;
-		pthread_mutex_unlock(&philo->dead_lock);
+		pthread_mutex_unlock(&philo->table->dead_lock);
 		return (1);
 	}
 	return (0);

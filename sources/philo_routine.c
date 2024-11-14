@@ -14,10 +14,10 @@
 
 int	check_dead_loop(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->dead_lock);
+	pthread_mutex_lock(&philo->table->dead_lock);
 	if (philo->table->philo_dead == 1)
-		return (pthread_mutex_unlock(&philo->dead_lock), 1);
-	pthread_mutex_unlock(&philo->dead_lock);
+		return (pthread_mutex_unlock(&philo->table->dead_lock), 1);
+	pthread_mutex_unlock(&philo->table->dead_lock);
 	return (0);
 }
 
@@ -34,8 +34,8 @@ void	eat_routine(t_philo *philo)
 	pthread_mutex_lock(&philo->meal_lock);
 	philo->meal_count++;
 	philo->last_meal = get_time();
-	pthread_mutex_unlock(&philo->meal_lock);
 	ft_sleep_eat(table->time_to_eat);
+	pthread_mutex_unlock(&philo->meal_lock);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }

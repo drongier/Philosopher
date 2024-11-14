@@ -43,9 +43,9 @@ void	print_message(char *str, t_philo *philo, int id)
 {
 	size_t	time;
 
-	pthread_mutex_lock(&philo->write_lock);
+	pthread_mutex_lock(&philo->table->write_lock);
 	time = get_time() - philo->table->start_time;
 	if (!check_dead_loop(philo))
 		printf("%zu %d %s\n", time, id, str);
-	pthread_mutex_unlock(&philo->write_lock);
+	pthread_mutex_unlock(&philo->table->write_lock);
 }

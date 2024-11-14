@@ -17,8 +17,8 @@ void	end_prog(t_table *table)
 	int	i;
 
 	i = 0;
-	pthread_mutex_destroy(&table->philo->dead_lock);
-	pthread_mutex_destroy(&table->philo->write_lock);
+	pthread_mutex_destroy(&table->dead_lock);
+	pthread_mutex_destroy(&table->write_lock);
 	pthread_mutex_destroy(&table->philo->meal_lock);
 	while (i < table->philo_nbr)
 	{
@@ -67,11 +67,14 @@ int	main(int ac, char **av)
 	if (ac < 5 || ac > 6)
 		return (exit_error(3), FALSE);
 	if (arg_is_ok(av))
+	{
 		init_struct(&table, av);
-	init_forks(&table, table.philo_nbr);
-	init_philos(&table);
-	init_prog(&table);
-	create_thread(&table);
+		init_forks(&table, table.philo_nbr);
+		init_philos(&table);
+		init_prog(&table);
+		create_thread(&table);
+	}
 	end_prog(&table);
 	free_philo(&table);
+	return (0);
 }

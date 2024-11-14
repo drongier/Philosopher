@@ -68,7 +68,7 @@ void	init_forks(t_table *table, int philo_nbr)
 
 void	init_prog(t_table *table)
 {
-	pthread_mutex_init(&table->philo->dead_lock, NULL);
-	pthread_mutex_init(&table->philo->write_lock, NULL);
+	pthread_mutex_init(&table->dead_lock, NULL);
+	pthread_mutex_init(&table->write_lock, NULL);
 	pthread_mutex_init(&table->philo->meal_lock, NULL);
 }

@@ -4,7 +4,7 @@ CC = gcc
 
 RM = rm -f
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror 
 
 SOURCES = sources/main.c \
 			sources/check_errors.c \
