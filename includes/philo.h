@@ -24,13 +24,9 @@
 typedef struct s_philo
 {
 	int					id;
-	int					time_to_die;
-	int					time_to_eat;
-	int					time_to_sleep;
 	int					meal_count;
 	int					last_meal;
 	pthread_t			thread_id;
-	pthread_mutex_t		meal_lock;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
 	struct s_table		*table;
@@ -43,8 +39,9 @@ typedef struct s_table
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				meal_nbr;
-	int				start_time;
+	size_t				start_time;
 	int				philo_dead;
+	int				all_eat;
 	t_philo			*philo;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t		dead_lock;
@@ -52,15 +49,15 @@ typedef struct s_table
 
 }	t_table;
 
-void	ft_sleep_eat(int time);
+void	ft_sleep_eat(size_t time);
 void	*spy_philos(void *arg);
-void	print_message(char *str, t_philo *philo, int id);
+void	afficher_message(t_philo *philo, char *message);
 void	init_forks(t_table *table, int philo_nbr);
 void	init_prog(t_table *table);
 void	exit_error(int i);
 void	*philo_routine(void *arg);
 int		arg_is_ok(char **av);
-int		get_time(void);
-int		check_dead_loop(t_philo *philo);
+size_t		get_time(void);
+void		check_dead_loop(t_table *tab);
 int		init_philos(t_table *table);
 int		init_struct(t_table *table, char **av);

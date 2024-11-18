@@ -22,30 +22,50 @@ void	exit_error(int i)
 		printf("Error: pls use ./philo xxx xxx xxx xxx [x]\n");
 }
 
-int	get_time(void)
+size_t	get_time(void)
 {
-	static struct timeval	t;
+	struct timeval	t;
 
 	gettimeofday(&t, NULL);
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
-void	ft_sleep_eat(int time)
+void	ft_sleep_eat(size_t time)
 {
-	int	start;
+	size_t	start;
 
 	start = get_time();
 	while ((get_time() - start) < time)
 		usleep(50);
 }
 
-void	print_message(char *str, t_philo *philo, int id)
-{
-	size_t	time;
+// static char	*obtenir_message(int message)
+// {
+// 	if (message == FORK)
+// 		return ("has taken a fork");
+// 	if (message == MANGER)
+// 		return ("is eating");
+// 	if (message == MESSAGE_SOMMEIL)
+// 		return ("is sleeping");
+// 	if (message == MESSAGE_PENSER)
+// 		return ("is thinking");
+// 	if (message == MESSAGE_MORT)
+// 		return ("died");
+// 	return ("Error: not valid msg id");
+// }
 
+void	afficher_message(t_philo *philo, char *message)
+{
+	size_t	t;
+
+	t = get_time() - philo->table->start_time;
 	pthread_mutex_lock(&philo->table->write_lock);
-	time = get_time() - philo->table->start_time;
-	if (!check_dead_loop(philo))
-		printf("%zu %d %s\n", time, id, str);
+	if (!philo->table->philo_dead && !philo->table->all_eat)
+	{
+		printf("%ld ", t);
+		printf(" %d ", philo->id);
+		printf("%s", message);
+		printf("\n");
+	}
 	pthread_mutex_unlock(&philo->table->write_lock);
 }

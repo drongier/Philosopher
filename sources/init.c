@@ -17,18 +17,15 @@ int	init_philos(t_table *table)
 	int	i;
 
 	i = 0;
-	table->philo = malloc(sizeof(t_philo) * table->philo_nbr);
+	table->philo = (t_philo *)malloc(sizeof(t_philo) * table->philo_nbr);
 	if (!table->philo)
 		return (exit_error(1), FALSE);
 	while (i < table->philo_nbr)
 	{
 		table->philo[i].id = i + 1;
-		table->philo[i].time_to_die = table->time_to_die;
-		table->philo[i].time_to_eat = table->time_to_eat;
-		table->philo[i].time_to_sleep = table->time_to_sleep;
 		table->philo[i].meal_count = 0;
-		table->philo[i].last_meal = get_time();
 		table->philo[i].table = table;
+		table->philo[i].last_meal = table->start_time;
 		table->philo[i].left_fork = &table->forks[i];
 		if (i == 0)
 			table->philo[i].right_fork = &table->forks[table->philo_nbr - 1];
@@ -46,6 +43,7 @@ int	init_struct(t_table *table, char **av)
 	table->time_to_eat = atoi(av[3]);
 	table->time_to_sleep = atoi(av[4]);
 	table->philo_dead = 0;
+	table->all_eat = 0;
 	if (av[5])
 		table->meal_nbr = atoi(av[5]);
 	else
@@ -70,5 +68,4 @@ void	init_prog(t_table *table)
 {
 	pthread_mutex_init(&table->dead_lock, NULL);
 	pthread_mutex_init(&table->write_lock, NULL);
-	pthread_mutex_init(&table->philo->meal_lock, NULL);
 }
