@@ -12,6 +12,38 @@
 
 #include "../includes/philo.h"
 
+int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+int	ft_atol(const char *str)
+{
+	int					i;
+	int					sign;
+	unsigned long int	result;
+
+	i = 0;
+	sign = 1;
+	result = 0;
+	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-')
+	{
+		sign = -1;
+		i++;
+	}
+	else if (str[i] == '+')
+		i++;
+	while (ft_isdigit(str[i]))
+	{
+		result *= 10;
+		result += str[i] - '0';
+		i++;
+	}
+	return (result * sign);
+}
+
 int	arg_is_num(char **av)
 {
 	int	i;
@@ -39,7 +71,7 @@ int	arg_min_max(char **av) // ATTENTION ATOL TO MODIFI
 	i = 0;
 	while (av[i])
 	{
-		if ((atol(av[i]) >= INT_MAX) || (atol(av[i]) <= INT_MIN))
+		if ((ft_atol(av[i]) >= INT_MAX) || (ft_atol(av[i]) <= INT_MIN))
 			return (exit_error(2), FALSE);
 		i++;
 	}

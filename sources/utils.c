@@ -15,9 +15,15 @@
 void	exit_error(int i)
 {
 	if (i == 1)
+	{
 		printf("Error: Arg is not a number !\n");
+		exit(1);
+	}
 	else if (i == 2)
+	{
 		printf("Error: INT MAX or INT MIN !\n");
+		exit(1);
+	}
 	else if (i == 3)
 		printf("Error: pls use ./philo xxx xxx xxx xxx [x]\n");
 }
@@ -30,31 +36,20 @@ size_t	get_time(void)
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
-void	ft_sleep_eat(size_t time)
+void	ft_sleep_eat(t_table *tab, size_t time)
 {
-	size_t	start;
+	size_t	t;
 
-	start = get_time();
-	while ((get_time() - start) < time)
-		usleep(50);
+	t = get_time();
+	while (!(tab->philo_dead))
+	{
+		if (get_time() - t >= time)
+			break ;
+		usleep(100);
+	}
 }
 
-// static char	*obtenir_message(int message)
-// {
-// 	if (message == FORK)
-// 		return ("has taken a fork");
-// 	if (message == MANGER)
-// 		return ("is eating");
-// 	if (message == MESSAGE_SOMMEIL)
-// 		return ("is sleeping");
-// 	if (message == MESSAGE_PENSER)
-// 		return ("is thinking");
-// 	if (message == MESSAGE_MORT)
-// 		return ("died");
-// 	return ("Error: not valid msg id");
-// }
-
-void	afficher_message(t_philo *philo, char *message)
+void	print_message(t_philo *philo, char *message)
 {
 	size_t	t;
 

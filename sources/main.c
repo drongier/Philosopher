@@ -35,15 +35,34 @@ void	end_prog(t_table *table, pthread_t	*id)
 	free(id);
 }
 
+void	start_program(t_table *table, pthread_t *id)
+{
+	int	i;
+	table->start_time = get_time();
+	i = -1;
+
+	while (++i < table->philo_nbr)
+	{
+		if (pthread_create(&id[i], NULL, &philo_routine, &table->philo[i]))
+		{
+			write(2, "Error! cannot create thread\n", 28);
+			free(table->philo);
+			free(id);
+			exit(1);
+		}
+		pthread_mutex_lock(&table->dead_lock);
+		table->philo[i].last_meal = table->start_time;
+		pthread_mutex_unlock(&table->dead_lock);
+	}
+}
+
 int	main(int ac, char **av)
 {
-	int 		i;
 	t_table		table;
 	pthread_t	*id;
 
 	if (ac < 5 || ac > 6)
 		return (exit_error(3), FALSE);
-	
 	if (arg_is_ok(av))
 	{
 		init_struct(&table, av);
@@ -51,24 +70,8 @@ int	main(int ac, char **av)
 		init_philos(&table);
 		init_prog(&table);
 	}
-	table.start_time = get_time();
-	i = -1;
 	id = (pthread_t *)malloc(table.philo_nbr * sizeof(pthread_t));
-	printf("philo dead = %i\n", table.philo_dead);
-	while (++i < table.philo_nbr)
-	{
-		if (pthread_create(&id[i], NULL, &philo_routine, &table.philo[i]))
-		{
-			write(2, "Error! cannot create thread\n", 28);
-			free(table.philo);
-			free(id);
-			return (1);
-		}
-		pthread_mutex_lock(&table.dead_lock);
-		table.philo[i].last_meal = table.start_time;
-		pthread_mutex_unlock(&table.dead_lock);
-	}
-	printf("philo dead = %i\n", table.philo_dead);
+	start_program(&table, id);
 	check_dead_loop(&table);
 	end_prog(&table, id);
 	return (0);
