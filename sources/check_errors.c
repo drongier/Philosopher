@@ -6,22 +6,17 @@
 /*   By: drongier <drongier@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:08:47 by drongier          #+#    #+#             */
-/*   Updated: 2024/10/25 14:11:21 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/20 18:45:57 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	ft_isdigit(int c)
+long	ft_atol(const char *str)
 {
-	return (c >= '0' && c <= '9');
-}
-
-int	ft_atol(const char *str)
-{
-	int					i;
-	int					sign;
-	unsigned long int	result;
+	int		i;
+	int		sign;
+	long	result;
 
 	i = 0;
 	sign = 1;
@@ -64,7 +59,7 @@ int	arg_is_num(char **av)
 	return (TRUE);
 }
 
-int	arg_min_max(char **av) // ATTENTION ATOL TO MODIFI
+int	arg_min_max(char **av)
 {
 	int	i;
 
@@ -78,9 +73,17 @@ int	arg_min_max(char **av) // ATTENTION ATOL TO MODIFI
 	return (TRUE);
 }
 
+int	nb_philo_ok(char **av)
+{
+	if (ft_atol(av[1]) > 200)
+		return (exit_error(4), FALSE);
+	else 
+		return (TRUE);
+}
+
 int	arg_is_ok(char **av)
 {
-	if (arg_min_max(av) && arg_is_num(av))
+	if (arg_min_max(av) && arg_is_num(av) && nb_philo_ok(av))
 		return (TRUE);
 	else
 		return (FALSE);

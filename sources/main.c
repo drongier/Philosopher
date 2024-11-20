@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:24:23 by drongier          #+#    #+#             */
-/*   Updated: 2024/10/24 15:45:44 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/20 18:49:49 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	end_prog(t_table *table, pthread_t	*id)
 void	start_program(t_table *table, pthread_t *id)
 {
 	int	i;
+
 	table->start_time = get_time();
 	i = -1;
-
 	while (++i < table->philo_nbr)
 	{
 		if (pthread_create(&id[i], NULL, &philo_routine, &table->philo[i]))
@@ -69,10 +69,11 @@ int	main(int ac, char **av)
 		init_forks(&table, table.philo_nbr);
 		init_philos(&table);
 		init_prog(&table);
+		id = (pthread_t *)malloc(table.philo_nbr * sizeof(pthread_t));
+		start_program(&table, id);
+		check_dead_loop(&table);
+		end_prog(&table, id);
 	}
-	id = (pthread_t *)malloc(table.philo_nbr * sizeof(pthread_t));
-	start_program(&table, id);
-	check_dead_loop(&table);
-	end_prog(&table, id);
-	return (0);
+	else
+		return (0);
 }

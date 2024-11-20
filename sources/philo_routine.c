@@ -12,6 +12,16 @@
 
 #include "../includes/philo.h"
 
+void	kill_one_philo(t_table *table, t_philo *philo)
+{
+	{
+		ft_sleep_eat(table, table->time_to_eat);
+		print_message(philo, "died");
+		pthread_mutex_unlock(philo->right_fork);
+		table->philo_dead = 1;
+	}
+}
+
 void	eat_routine(t_philo *philo)
 {
 	t_table	*table;
@@ -19,6 +29,11 @@ void	eat_routine(t_philo *philo)
 	table = philo->table;
 	pthread_mutex_lock(philo->left_fork);
 	print_message(philo, "has taken fork");
+	if (table->philo_nbr == 1)
+	{
+		kill_one_philo(table, philo);
+		return ;
+	}
 	pthread_mutex_lock(philo->right_fork);
 	print_message(philo, "has taken fork");
 	pthread_mutex_lock(&table->dead_lock);

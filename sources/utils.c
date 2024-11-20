@@ -12,20 +12,21 @@
 
 #include "../includes/philo.h"
 
+int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}
+
 void	exit_error(int i)
 {
 	if (i == 1)
-	{
 		printf("Error: Arg is not a number !\n");
-		exit(1);
-	}
 	else if (i == 2)
-	{
 		printf("Error: INT MAX or INT MIN !\n");
-		exit(1);
-	}
 	else if (i == 3)
 		printf("Error: pls use ./philo xxx xxx xxx xxx [x]\n");
+	else if (i == 4)
+		printf("Error: Too many philosophers !\n");
 }
 
 size_t	get_time(void)
