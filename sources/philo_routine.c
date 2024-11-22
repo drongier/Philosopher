@@ -17,8 +17,8 @@ void	kill_one_philo(t_table *table, t_philo *philo)
 	{
 		ft_sleep_eat(table, table->time_to_eat);
 		print_message(philo, "died");
-		pthread_mutex_unlock(philo->right_fork);
 		table->philo_dead = 1;
+		pthread_mutex_unlock(philo->right_fork);
 	}
 }
 
@@ -36,11 +36,11 @@ void	eat_routine(t_philo *philo)
 	}
 	pthread_mutex_lock(philo->right_fork);
 	print_message(philo, "has taken fork");
-	pthread_mutex_lock(&table->dead_lock);
+	pthread_mutex_lock(&philo->time_meal);
 	philo->meal_count++;
 	print_message(philo, "is eating");
 	philo->last_meal = get_time();
-	pthread_mutex_unlock(&table->dead_lock);
+	pthread_mutex_unlock(&philo->time_meal);
 	ft_sleep_eat(table, table->time_to_eat);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);

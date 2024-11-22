@@ -22,12 +22,15 @@ void	end_prog(t_table *table, pthread_t	*id)
 		pthread_join(id[i], NULL);
 		i++;
 	}
+	if (table->philo_nbr > 1)
+		pthread_join(table->check_dead_loop, NULL);
 	i = 0;
 	pthread_mutex_destroy(&table->dead_lock);
 	pthread_mutex_destroy(&table->write_lock);
 	while (i < table->philo_nbr)
 	{
-		pthread_mutex_init(&table->forks[i], NULL);
+		pthread_mutex_destroy(&table->philo[i].time_meal);
+		pthread_mutex_destroy(&table->forks[i]);
 		i++;
 	}
 	free(table->philo);
@@ -50,9 +53,13 @@ void	start_program(t_table *table, pthread_t *id)
 			free(id);
 			exit(1);
 		}
-		pthread_mutex_lock(&table->dead_lock);
+		//pthread_mutex_lock(&table->philo[i].time_meal);
 		table->philo[i].last_meal = table->start_time;
-		pthread_mutex_unlock(&table->dead_lock);
+		//pthread_mutex_unlock(&table->philo[i].time_meal);
+	}
+	if (table->philo_nbr > 1)
+	{
+		pthread_create(&table->check_dead_loop, NULL, &check_dead_loop, table);
 	}
 }
 

@@ -55,7 +55,7 @@ void	print_message(t_philo *philo, char *message)
 	size_t	t;
 
 	t = get_time() - philo->table->start_time;
-	pthread_mutex_lock(&philo->table->write_lock);
+	//pthread_mutex_lock(&philo->table->write_lock);
 	if (!philo->table->philo_dead && !philo->table->all_eat)
 	{
 		printf("%ld ", t);
@@ -63,5 +63,5 @@ void	print_message(t_philo *philo, char *message)
 		printf("%s", message);
 		printf("\n");
 	}
-	pthread_mutex_unlock(&philo->table->write_lock);
+	//pthread_mutex_unlock(&philo->table->write_lock);
 }

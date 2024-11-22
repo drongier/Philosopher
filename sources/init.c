@@ -26,6 +26,7 @@ int	init_philos(t_table *table)
 		table->philo[i].meal_count = 0;
 		table->philo[i].table = table;
 		table->philo[i].last_meal = table->start_time;
+		pthread_mutex_init(&table->philo[i].time_meal, NULL);
 		table->philo[i].left_fork = &table->forks[i];
 		if (i == 0)
 			table->philo[i].right_fork = &table->forks[table->philo_nbr - 1];
@@ -59,7 +60,7 @@ void	init_forks(t_table *table, int philo_nbr)
 	table->forks = malloc(sizeof(pthread_mutex_t) * table->philo_nbr);
 	while (i < philo_nbr)
 	{
-		pthread_mutex_init(&table->forks[i], NULL);
+		pthread_mutex_init(&table->philo[i].fork, NULL);
 		i++;
 	}
 }

@@ -12,8 +12,11 @@
 
 #include "../includes/philo.h"
 
-void	check_dead_loop(t_table *tab)
+void	*check_dead_loop(void *data)
 {
+	t_table *tab;
+
+	tab = (t_table *)data;
 	int	i;
 
 	while (!tab->all_eat)
@@ -21,13 +24,13 @@ void	check_dead_loop(t_table *tab)
 		i = -1;
 		while (!tab->philo_dead && ++i < tab->philo_nbr)
 		{
-			pthread_mutex_lock(&tab->dead_lock);
+			//pthread_mutex_lock(&tab->dead_lock);
 			if (get_time() - tab->philo[i].last_meal > (size_t)tab->time_to_die)
 			{
 				print_message(&tab->philo[i], "is died");
 				tab->philo_dead = 1;
 			}
-			pthread_mutex_unlock(&tab->dead_lock);
+			//pthread_mutex_unlock(&tab->dead_lock);
 			usleep(100);
 		}
 		if (tab->philo_dead)
@@ -39,4 +42,5 @@ void	check_dead_loop(t_table *tab)
 		if (i == tab->philo_nbr)
 			tab->all_eat = 1;
 	}
+	return (NULL);
 }
