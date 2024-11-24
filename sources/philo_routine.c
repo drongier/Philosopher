@@ -18,7 +18,7 @@ void	kill_one_philo(t_table *table, t_philo *philo)
 		ft_sleep_eat(table, table->time_to_eat);
 		print_message(philo, "died");
 		table->philo_dead = 1;
-		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(&philo->table->forks_lock[philo->fork[0]]);
 	}
 }
 
@@ -27,14 +27,14 @@ void	eat_routine(t_philo *philo)
 	t_table	*table;
 
 	table = philo->table;
-	pthread_mutex_lock(philo->left_fork);
+	pthread_mutex_lock(&philo->table->forks_lock[philo->fork[0]]);
 	print_message(philo, "has taken fork");
 	if (table->philo_nbr == 1)
 	{
 		kill_one_philo(table, philo);
 		return ;
 	}
-	pthread_mutex_lock(philo->right_fork);
+	pthread_mutex_lock(&philo->table->forks_lock[philo->fork[1]]);
 	print_message(philo, "has taken fork");
 	pthread_mutex_lock(&philo->time_meal);
 	philo->meal_count++;
@@ -42,8 +42,8 @@ void	eat_routine(t_philo *philo)
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->time_meal);
 	ft_sleep_eat(table, table->time_to_eat);
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(&philo->table->forks_lock[philo->fork[0]]);
+	pthread_mutex_unlock(&philo->table->forks_lock[philo->fork[1]]);
 }
 
 void	*philo_routine(void *arg)
@@ -53,10 +53,12 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	tab = philo->table;
+	printf("coucou\n");
 	if (philo->id % 2 == 0)
 		usleep(1000);
 	while (!tab->philo_dead && !tab->all_eat)
 	{
+		printf("coucou\n");
 		eat_routine(philo);
 		print_message(philo, "is sleeping");
 		ft_sleep_eat(tab, tab->time_to_eat);

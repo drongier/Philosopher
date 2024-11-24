@@ -12,14 +12,14 @@
 
 #include "../includes/philo.h"
 
-void	end_prog(t_table *table, pthread_t	*id)
+void	end_prog(t_table *table)
 {
 	int	i;
 
 	i = 0;
 	while (i < table->philo_nbr)
 	{
-		pthread_join(id[i], NULL);
+		pthread_join(table->philo[i]->thread_id, NULL);
 		i++;
 	}
 	if (table->philo_nbr > 1)
@@ -29,16 +29,14 @@ void	end_prog(t_table *table, pthread_t	*id)
 	pthread_mutex_destroy(&table->write_lock);
 	while (i < table->philo_nbr)
 	{
-		pthread_mutex_destroy(&table->philo[i].time_meal);
-		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&table->philo[i]->time_meal);
+		pthread_mutex_destroy(&table->forks_lock[i]);
 		i++;
 	}
 	free(table->philo);
-	free(table->forks);
-	free(id);
 }
 
-void	start_program(t_table *table, pthread_t *id)
+void	start_program(t_table *table)
 {
 	int	i;
 
@@ -46,16 +44,15 @@ void	start_program(t_table *table, pthread_t *id)
 	i = -1;
 	while (++i < table->philo_nbr)
 	{
-		if (pthread_create(&id[i], NULL, &philo_routine, &table->philo[i]))
+		if (pthread_create(&table->philo[i]->thread_id, NULL, &philo_routine, &table->philo[i]))
 		{
 			write(2, "Error! cannot create thread\n", 28);
 			free(table->philo);
-			free(id);
 			exit(1);
 		}
-		//pthread_mutex_lock(&table->philo[i].time_meal);
-		table->philo[i].last_meal = table->start_time;
-		//pthread_mutex_unlock(&table->philo[i].time_meal);
+		pthread_mutex_lock(&table->philo[i]->time_meal);
+		table->philo[i]->last_meal = table->start_time;
+		pthread_mutex_unlock(&table->philo[i]->time_meal);
 	}
 	if (table->philo_nbr > 1)
 	{
@@ -65,21 +62,19 @@ void	start_program(t_table *table, pthread_t *id)
 
 int	main(int ac, char **av)
 {
-	t_table		table;
-	pthread_t	*id;
+	t_table		*table;
 
 	if (ac < 5 || ac > 6)
 		return (exit_error(3), FALSE);
 	if (arg_is_ok(av))
 	{
-		init_struct(&table, av);
-		init_forks(&table, table.philo_nbr);
-		init_philos(&table);
-		init_prog(&table);
-		id = (pthread_t *)malloc(table.philo_nbr * sizeof(pthread_t));
-		start_program(&table, id);
-		check_dead_loop(&table);
-		end_prog(&table, id);
+		table = malloc(sizeof(t_table) * 1);
+		init_struct(table, av);
+		printf("%i\n", table->philo_nbr);
+		table->philo = init_philos(table);
+		init_prog(table);
+		start_program(table);
+		end_prog(table);
 	}
 	else
 		return (0);
