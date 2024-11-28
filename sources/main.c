@@ -3,79 +3,84 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drongier <drongier@student.42berlin.d      +#+  +:+       +#+        */
+/*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/24 15:24:23 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/20 18:49:49 by drongier         ###   ########.fr       */
+/*   Created: 2024/11/28 19:06:08 by drongier          #+#    #+#             */
+/*   Updated: 2024/11/28 19:36:04 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "philo.h"
 
-void	end_prog(t_table *table)
+static void	stop_prog(t_table	*table)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
-	while (i < table->philo_nbr)
+	while (i < table->nb_philos)
 	{
-		pthread_join(table->philo[i]->thread_id, NULL);
+		pthread_join(table->philos[i]->thread, NULL);
 		i++;
 	}
-	if (table->philo_nbr > 1)
-		pthread_join(table->check_dead_loop, NULL);
-	i = 0;
-	pthread_mutex_destroy(&table->dead_lock);
-	pthread_mutex_destroy(&table->write_lock);
-	while (i < table->philo_nbr)
-	{
-		pthread_mutex_destroy(&table->philo[i]->time_meal);
-		pthread_mutex_destroy(&table->forks_lock[i]);
-		i++;
-	}
-	free(table->philo);
+	if (table->nb_philos > 1)
+		pthread_join(table->spy_philo, NULL);
+	destroy_mutexes(table);
+	end_prog(table);
 }
 
-void	start_program(t_table *table)
+static int	start_prog(t_table *table)
 {
-	int	i;
+	unsigned int	i;
 
-	table->start_time = get_time();
-	i = -1;
-	while (++i < table->philo_nbr)
+	i = 0;
+	while (i < table->nb_philos)
 	{
-		if (pthread_create(&table->philo[i]->thread_id, NULL, &philo_routine, &table->philo[i]))
+		if (pthread_create(&table->philos[i]->thread, NULL, \
+					&philosopher, table->philos[i]) != 0)
 		{
-			write(2, "Error! cannot create thread\n", 28);
-			free(table->philo);
-			exit(1);
+			if (table != NULL)
+				end_prog(table);
+			return (EXIT_FAILURE);
 		}
-		pthread_mutex_lock(&table->philo[i]->time_meal);
-		table->philo[i]->last_meal = table->start_time;
-		pthread_mutex_unlock(&table->philo[i]->time_meal);
+		i++;
 	}
-	if (table->philo_nbr > 1)
+	if (table->nb_philos > 1)
 	{
-		pthread_create(&table->check_dead_loop, NULL, &check_dead_loop, table);
+		if (pthread_create(&table->spy_philo, NULL, &spy_philo, table) != 00000)
+		{
+			if (table != NULL)
+				end_prog(table);
+			return (EXIT_FAILURE);
+		}
 	}
+	return (1);
 }
 
-int	main(int ac, char **av)
+int	main(int ac, char *av[])
 {
-	t_table		*table;
+	t_table	*table;
 
-	if (ac < 5 || ac > 6)
-		return (exit_error(3), FALSE);
+	table = NULL;
+	if (ac - 1 < 4 || ac - 1 > 5)
+	{
+		exit_error(3);
+		return (EXIT_FAILURE);
+	}
 	if (arg_is_ok(av))
 	{
-		table = malloc(sizeof(t_table) * 1);
-		init_struct(table, av);
-		printf("%i\n", table->philo_nbr);
-		table->philo = init_philos(table);
-		init_prog(table);
-		start_program(table);
-		end_prog(table);
+		table = init_table(ac, av, 1);
+		if (!table)
+			return (EXIT_FAILURE);
+		table->philos = init_philo(table);
+		if (!table->philos)
+			return (EXIT_FAILURE);
+		if (!init_global_mutexes(table))
+			return (EXIT_FAILURE);
+		table->start_time = get_time_in_ms();
+		if (!start_prog(table))
+			return (EXIT_FAILURE);
+		stop_prog(table);
+		return (EXIT_SUCCESS);
 	}
-	else
-		return (0);
+	return (EXIT_FAILURE);
 }

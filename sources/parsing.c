@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_errors.c                                     :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drongier <drongier@student.42berlin.d      +#+  +:+       +#+        */
+/*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 14:08:47 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/20 18:45:57 by drongier         ###   ########.fr       */
+/*   Created: 2024/11/28 19:08:08 by drongier          #+#    #+#             */
+/*   Updated: 2024/11/28 19:23:55 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "philo.h"
 
 long	ft_atol(const char *str)
 {
@@ -51,12 +51,12 @@ int	arg_is_num(char **av)
 		while (av[i][j])
 		{
 			if (!(av[i][j] >= '0' && av[i][j] <= '9'))
-				return (exit_error(1), FALSE);
+				return (exit_error(1), 0);
 			j++;
 		}
 		i++;
 	}
-	return (TRUE);
+	return (1);
 }
 
 int	arg_min_max(char **av)
@@ -67,24 +67,24 @@ int	arg_min_max(char **av)
 	while (av[i])
 	{
 		if ((ft_atol(av[i]) >= INT_MAX) || (ft_atol(av[i]) <= INT_MIN))
-			return (exit_error(2), FALSE);
+			return (exit_error(2), 0);
 		i++;
 	}
-	return (TRUE);
+	return (1);
 }
 
 int	nb_philo_ok(char **av)
 {
 	if (ft_atol(av[1]) > 200)
-		return (exit_error(4), FALSE);
+		return (exit_error(4), 0);
 	else 
-		return (TRUE);
+		return (1);
 }
 
 int	arg_is_ok(char **av)
 {
 	if (arg_min_max(av) && arg_is_num(av) && nb_philo_ok(av))
-		return (TRUE);
+		return (1);
 	else
-		return (FALSE);
+		return (0);
 }

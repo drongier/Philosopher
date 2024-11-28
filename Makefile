@@ -1,21 +1,42 @@
-NAME = philo
+NAME	= philo
 
-CC = gcc 
-RM = rm -f
+CC		= gcc
 
-FLAGS = -Wall -Wextra -Werror -g -fsanitize=thread
+CFLAGS	= -Werror -Wall -Wextra -g -fsanitize=thread
 
-SOURCES = sources/main.c \
-			sources/check_errors.c \
-			sources/utils.c \
-			sources/philo_routine.c \
-			sources/init.c \
-			sources/check_dead.c
+SRC_PATH = sources/
 
-all: 
-	${CC} ${FLAGS} ${SOURCES} -o ${NAME}
+OBJ_PATH = objects/
 
-fclean:
-	${RM} ${NAME}
+SRC		=	main.c \
+			parsing.c \
+			spy_philo.c \
+			time.c \
+			philosopher.c \
+			init.c \
+			output.c \
+			exit.c
+SRCS	= $(addprefix $(SRC_PATH), $(SRC))
+OBJ		= $(SRC:.c=.o)
+OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
+
+INC		= -I ./includes/
+
+all: $(NAME)
+
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c
+	@mkdir -p $(OBJ_PATH)
+	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $@
+
+clean:
+	rm -rf $(OBJ_PATH)
+
+fclean: clean
+	rm -f $(NAME)
 
 re: fclean all
+
+.PHONY: all re clean fclean

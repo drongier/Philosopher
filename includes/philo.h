@@ -3,61 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drongier <drongier@student.42berlin.d      +#+  +:+       +#+        */
+/*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 14:22:43 by drongier          #+#    #+#             */
-/*   Updated: 2024/10/25 14:37:20 by drongier         ###   ########.fr       */
+/*   Created: 2024/11/28 19:09:38 by drongier          #+#    #+#             */
+/*   Updated: 2024/11/28 19:38:30 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <stdbool.h>
-#include <limits.h>
-#include <sys/time.h>
+#ifndef PHILO_H
+# define PHILO_H
 
-#define TRUE 1
-#define FALSE 0
+# include <pthread.h>
+# include <limits.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
+
+typedef struct s_philo	t_philo;
 
 typedef struct s_table
 {
-	int					philo_nbr;
-	int					time_to_die;
-	int					time_to_eat;
-	int					time_to_sleep;
-	int					meal_nbr;
-	int					philo_dead;
-	int					all_eat;
-	pthread_t			check_dead_loop;
-	struct s_philo      **philo;
-	size_t				start_time;
-	pthread_mutex_t		*forks_lock;
-	pthread_mutex_t		dead_lock;
-	pthread_mutex_t		write_lock;
-	
+	time_t			start_time;
+	unsigned int	nb_philos;
+	pthread_t		spy_philo;
+	time_t			time_to_die;
+	time_t			time_to_eat;
+	time_t			time_to_sleep;
+	int				must_eat_count;
+	int				sim_stop;
+	pthread_mutex_t	sim_stop_lock;
+	pthread_mutex_t	write_lock;
+	pthread_mutex_t	*fork_locks;
+	t_philo			**philos;
 }	t_table;
 
 typedef struct s_philo
 {
-	int					id;
-	int					meal_count;
-	int					fork[2];
-	size_t				last_meal;
-	pthread_t			thread_id;
-	pthread_mutex_t		time_meal;
-	struct s_table		*table;
+	pthread_t			thread;
+	unsigned int		id;
+	unsigned int		times_ate;
+	unsigned int		left_fork;
+	unsigned int		right_fork;
+	pthread_mutex_t		meal_time_lock;
+	time_t				last_meal;
+	t_table				*table;
 }	t_philo;
 
-size_t		get_time(void);
-void		ft_sleep_eat(t_table *tab, size_t time);
-void		print_message(t_philo *philo, char *message);
-void		init_prog(t_table *table);
-void		exit_error(int i);
-void		*philo_routine(void *arg);
-void		*check_dead_loop(void *data);
-t_philo			**init_philos(t_table *table);
-void	init_struct(t_table *table, char **av);
-int			ft_isdigit(int c);
-int			arg_is_ok(char **av);
+int				arg_is_ok(char **av);
+int				ft_isdigit(int c);
+t_table			*init_table(int ac, char **av, int i);
+t_philo			**init_philo(t_table *table);
+int				init_global_mutexes(t_table *table);
+void			*philosopher(void *data);
+time_t			get_time_in_ms(void);
+void			philo_sleep(t_table *table, time_t time_to_sleep);
+void			write_status(t_philo *philo, char *str, int flag_spy);
+void			*spy_philo(void *data);
+int				check_prog(t_table *table);
+void			*end_prog(t_table *table);
+void			destroy_mutexes(t_table *table);
+void			exit_error(int i);
+
+#endif
