@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:06:08 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/29 17:18:32 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:40:49 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	start_prog(t_table *table)
 	}
 	if (table->nb_philos > 1)
 	{
-		if (pthread_create(&table->spy_philo, NULL, &spy_philo, table) != 00000)
+		if (pthread_create(&table->spy_philo, NULL, &spy_philo, table) != 0)
 		{
 			if (table != NULL)
 				end_prog(table);
