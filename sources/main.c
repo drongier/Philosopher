@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:06:08 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/28 19:36:04 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:18:32 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	stop_prog(t_table	*table)
 {
-	unsigned int	i;
+	int	i;
 
 	i = 0;
 	while (i < table->nb_philos)
@@ -30,7 +30,7 @@ static void	stop_prog(t_table	*table)
 
 static int	start_prog(t_table *table)
 {
-	unsigned int	i;
+	int	i;
 
 	i = 0;
 	while (i < table->nb_philos)
@@ -68,7 +68,7 @@ int	main(int ac, char *av[])
 	}
 	if (arg_is_ok(av))
 	{
-		table = init_table(ac, av, 1);
+		table = init_table(ac, av);
 		if (!table)
 			return (EXIT_FAILURE);
 		table->philos = init_philo(table);
@@ -76,7 +76,7 @@ int	main(int ac, char *av[])
 			return (EXIT_FAILURE);
 		if (!init_global_mutexes(table))
 			return (EXIT_FAILURE);
-		table->start_time = get_time_in_ms();
+		table->start_time = get_time();
 		if (!start_prog(table))
 			return (EXIT_FAILURE);
 		stop_prog(table);

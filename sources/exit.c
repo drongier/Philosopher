@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:53:57 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/28 19:33:47 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:59:30 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	*end_prog(t_table *table)
 {
-	unsigned int	i;
+	int	i;
 
 	if (!table)
 		return (NULL);
@@ -37,13 +37,13 @@ void	*end_prog(t_table *table)
 
 void	destroy_mutexes(t_table *table)
 {
-	unsigned int	i;
+	int	i;
 
 	i = 0;
 	while (i < table->nb_philos)
 	{
 		pthread_mutex_destroy(&table->fork_locks[i]);
-		pthread_mutex_destroy(&table->philos[i]->meal_time_lock);
+		pthread_mutex_destroy(&table->philos[i]->meal_lock);
 		i++;
 	}
 	pthread_mutex_destroy(&table->write_lock);

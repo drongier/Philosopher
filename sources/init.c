@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:54:12 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/28 19:37:48 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:59:44 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static	pthread_mutex_t	*init_forks(t_table *table)
 {
 	pthread_mutex_t	*forks;
-	unsigned int	i;
+	int				i;
 
 	forks = malloc(sizeof(pthread_mutex_t) * table->nb_philos);
 	if (!forks)
@@ -55,7 +55,7 @@ void	init_philo_info(t_philo *philo, t_table *table, int i)
 t_philo	**init_philo(t_table *table)
 {
 	t_philo			**philos;
-	unsigned int	i;
+	int				i;
 
 	philos = malloc(sizeof(t_philo *) * table->nb_philos);
 	if (!philos)
@@ -69,7 +69,7 @@ t_philo	**init_philo(t_table *table)
 			end_prog(table);
 			return (NULL);
 		}
-		if (pthread_mutex_init(&philos[i]->meal_time_lock, NULL) != 0)
+		if (pthread_mutex_init(&philos[i]->meal_lock, NULL) != 0)
 		{
 			end_prog(table);
 			return (NULL);
@@ -98,7 +98,7 @@ int	init_global_mutexes(t_table *table)
 	return (1);
 }
 
-t_table	*init_table(int ac, char **av, int i)
+t_table	*init_table(int ac, char **av)
 {
 	t_table	*table;
 
@@ -108,13 +108,13 @@ t_table	*init_table(int ac, char **av, int i)
 		end_prog(table);
 		return (NULL);
 	}
-	table->nb_philos = atoi(av[i++]);
-	table->time_to_die = atoi(av[i++]);
-	table->time_to_eat = atoi(av[i++]);
-	table->time_to_sleep = atoi(av[i++]);
-	table->must_eat_count = -1;
+	table->nb_philos = atoi(av[1]);
+	table->time_to_die = atoi(av[2]);
+	table->time_to_eat = atoi(av[3]);
+	table->time_to_sleep = atoi(av[4]);
+	table->nb_meal = -1;
 	if (ac - 1 == 5)
-		table->must_eat_count = atoi(av[i]);
-	table->sim_stop = 0;
+		table->nb_meal = atoi(av[5]);
+	table->stop = 0;
 	return (table);
 }

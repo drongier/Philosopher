@@ -2,20 +2,15 @@ NAME	= philo
 
 CC		= gcc
 
-CFLAGS	= -Werror -Wall -Wextra -g -fsanitize=thread
+CFLAGS	= -Werror -Wall -Wextra #-g -fsanitize=thread
 
 SRC_PATH = sources/
 
-OBJ_PATH = objects/
+OBJ_PATH = objs/
 
-SRC		=	main.c \
-			parsing.c \
-			spy_philo.c \
-			time.c \
-			philosopher.c \
-			init.c \
-			output.c \
-			exit.c
+SRC		=	main.c check_arg.c spy_philo.c time.c \
+			philosopher.c init.c output.c exit.c
+
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))

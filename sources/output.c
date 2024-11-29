@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:07:26 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/28 19:07:29 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:18:36 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	print_status(t_philo *philo, char *str)
 {
-	printf("%ld %d %s\n", get_time_in_ms() - philo->table->start_time,
+	printf("%ld %d %s\n", get_time() - philo->table->start_time,
 		philo->id + 1, str);
 }
 
