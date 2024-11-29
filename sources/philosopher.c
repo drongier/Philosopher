@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:08:13 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/29 17:28:32 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:33:46 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	eat_sleep_routine(t_philo *philo)
 	if (check_prog(philo->table) == 0)
 	{
 		pthread_mutex_lock(&philo->meal_lock);
-		philo->times_ate += 1;
+		philo->times_ate = philo->times_ate + 1;
 		pthread_mutex_unlock(&philo->meal_lock);
 	}
 	write_status(philo, "is sleeping", 0);

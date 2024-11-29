@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:53:57 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/29 16:59:30 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:31:58 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	destroy_mutexes(t_table *table)
 		i++;
 	}
 	pthread_mutex_destroy(&table->write_lock);
-	pthread_mutex_destroy(&table->sim_stop_lock);
+	pthread_mutex_destroy(&table->end_lock);
 }
 
 void	exit_error(int i)

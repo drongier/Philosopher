@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:09:38 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/29 17:18:24 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:31:49 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct s_table
 	time_t			time_to_eat;
 	time_t			time_to_sleep;
 	pthread_t		spy_philo;
-	pthread_mutex_t	sim_stop_lock;
+	pthread_mutex_t	end_lock;
 	pthread_mutex_t	write_lock;
 	pthread_mutex_t	*fork_locks;
 	struct s_philo	**philos;

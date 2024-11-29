@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:54:12 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/29 16:59:44 by drongier         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:32:07 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	init_global_mutexes(t_table *table)
 	table->fork_locks = init_forks(table);
 	if (!table->fork_locks)
 		return (0);
-	if (pthread_mutex_init(&table->sim_stop_lock, 0) != 0)
+	if (pthread_mutex_init(&table->end_lock, 0) != 0)
 	{
 		end_prog(table);
 		return (EXIT_FAILURE);
