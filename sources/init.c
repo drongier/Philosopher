@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:54:12 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/29 17:38:56 by drongier         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:17:34 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_philo	**init_philo(t_table *table)
 	return (philos);
 }
 
-int	init_global_mutexes(t_table *table)
+int	init_mutexes(t_table *table)
 {
 	table->fork_locks = init_forks(table);
 	if (!table->fork_locks)

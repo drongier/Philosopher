@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:09:38 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/29 17:31:49 by drongier         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:17:28 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,17 @@ typedef struct s_philo
 
 int				arg_is_ok(char **av);
 int				ft_isdigit(int c);
-t_table			*init_table(int ac, char **av);
-t_philo			**init_philo(t_table *table);
-int				init_global_mutexes(t_table *table);
+int				init_mutexes(t_table *table);
+int				check_prog(t_table *table);
 void			*philosopher(void *data);
-time_t			get_time(void);
 void			philo_sleep(t_table *table, time_t time_to_sleep);
 void			write_status(t_philo *philo, char *str, int flag_spy);
 void			*spy_philo(void *data);
-int				check_prog(t_table *table);
 void			*end_prog(t_table *table);
 void			destroy_mutexes(t_table *table);
 void			exit_error(int i);
+t_table			*init_table(int ac, char **av);
+t_philo			**init_philo(t_table *table);
+time_t			get_time(void);
 
 #endif

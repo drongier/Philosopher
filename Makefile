@@ -9,7 +9,7 @@ SRC_PATH = sources/
 OBJ_PATH = objs/
 
 SRC		=	main.c check_arg.c spy_philo.c time.c \
-			philosopher.c init.c output.c exit.c
+			philosopher.c init.c print_status.c exit.c
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)

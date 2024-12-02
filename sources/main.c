@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:06:08 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/29 17:40:49 by drongier         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:17:20 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	main(int ac, char *av[])
 		table->philos = init_philo(table);
 		if (!table->philos)
 			return (EXIT_FAILURE);
-		if (!init_global_mutexes(table))
+		if (!init_mutexes(table))
 			return (EXIT_FAILURE);
 		table->start_time = get_time();
 		if (!start_prog(table))

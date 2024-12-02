@@ -6,7 +6,7 @@
 /*   By: drongier <drongier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:08:20 by drongier          #+#    #+#             */
-/*   Updated: 2024/11/29 17:31:35 by drongier         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:59:05 by drongier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ static int	check_dead_philo(t_philo *philo)
 static int	check_condition(t_table *table)
 {
 	int				i;
-	int				all_ate_enough;
+	int				all_meal_eat;
 
-	all_ate_enough = 1;
+	all_meal_eat = 1;
 	i = 0;
 	while (i < table->nb_philos)
 	{
@@ -55,11 +55,11 @@ static int	check_condition(t_table *table)
 			return (1);
 		if (table->nb_meal != -1)
 			if (table->philos[i]->times_ate < table->nb_meal)
-				all_ate_enough = 0;
+				all_meal_eat = 0;
 		pthread_mutex_unlock(&table->philos[i]->meal_lock);
 		i++;
 	}
-	if (table->nb_meal != -1 && all_ate_enough == 1)
+	if (table->nb_meal != -1 && all_meal_eat == 1)
 	{
 		pthread_mutex_lock(&table->end_lock);
 		table->stop = 1;
